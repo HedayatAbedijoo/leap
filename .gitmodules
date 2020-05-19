@@ -1,0 +1,3 @@
+[submodule "dnas/course-catalog/zomes/profiles"]
+	path = dnas/course-catalog/zomes/profiles
+	url = https://github.com/holochain-open-dev/profiles-zome
