@@ -7,8 +7,6 @@ extern crate serde;
 extern crate serde_derive;
 extern crate serde_json;
 
-// use hdk::holochain_persistence_api::cas::content::Address;
-// use hdk::{entry_definition::ValidatingEntryType, error::ZomeApiResult};
 use hdk_proc_macros::zome;
 
 pub mod settings;
@@ -16,8 +14,6 @@ pub mod ticket;
 
 #[zome]
 mod my_zome {
-
-    use crate::{settings, ticket};
     use hdk::EntryValidationData;
     use ticket::Ticket;
 
@@ -66,18 +62,9 @@ mod my_zome {
                     return Err(String::from("Validation Error:  ticket is not valid"));
                 }
             }
-
-            EntryValidationData::Modify {
-                new_entry,
-                old_entry,
-                old_entry_header,
-                validation_data,
-            } => {}
-            EntryValidationData::Delete {
-                old_entry,
-                old_entry_header,
-                validation_data,
-            } => {}
+            _ => {
+                return Err(String::from("Validation Error:  validating the agent"));
+            }
         }
 
         Ok(())
