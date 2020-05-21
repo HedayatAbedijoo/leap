@@ -7,7 +7,6 @@ pub struct TicketInfo {
     source_item_id: String,
     issuer_address: String,
     timestamp: usize,
-    ticket_type: TicketType,
     buyer_address: String,
 }
 

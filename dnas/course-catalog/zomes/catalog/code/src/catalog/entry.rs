@@ -1,9 +1,6 @@
+use super::ticket::Ticket;
 use hdk::prelude::*;
 use holochain_entry_utils::HolochainEntry;
-
-
-
-
 #[derive(Serialize, Deserialize, Debug, DefaultJson, Clone)]
 pub struct Catalog {
     pub course_title: String,
@@ -15,7 +12,7 @@ pub struct Catalog {
 
 #[derive(Serialize, Deserialize, Debug, DefaultJson, Clone)]
 pub enum PaymentInfo {
-    Free,
+    Free { ticket: Ticket },
     PyamentOptions { payment_info_address: Address },
 }
 
@@ -24,10 +21,3 @@ impl HolochainEntry for Catalog {
         String::from("attestation")
     }
 }
-
-
-
-/// entry definition
-
-
-/// 
