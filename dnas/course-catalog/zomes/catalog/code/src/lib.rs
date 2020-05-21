@@ -1,4 +1,6 @@
 #![feature(proc_macro_hygiene)]
+// #[macro_use]
+// extern crate holochain_entry_utils;
 
 use hdk::prelude::*;
 use hdk_proc_macros::zome;
@@ -7,7 +9,7 @@ use hdk_proc_macros::zome;
 
 // This is a sample zome that defines an entry type "MyEntry" that can be committed to the
 // agent's chain via the exposed function create_my_entry
-
+pub(crate) mod catalog;
 #[derive(Serialize, Deserialize, Debug, DefaultJson, Clone)]
 pub struct MyEntry {
     content: String,
@@ -15,6 +17,8 @@ pub struct MyEntry {
 
 #[zome]
 mod my_zome {
+
+    // use crate::catalog::entry::Catalog;
 
     #[init]
     fn init() {
