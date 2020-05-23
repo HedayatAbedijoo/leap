@@ -1,10 +1,8 @@
 // Constant strings
 
-pub const COURSE_ENTRY_NAME: &str = "course";
-pub const COURSE_ENTRY_DESCRIPTION: &str = "Course entry contains all course data and is updated on every course change";
-
 pub const COURSE_ANCHOR_ENTRY_NAME: &str = "course_anchor";
-pub const COURSE_ANCHOR_ENTRY_DESCRIPTION: &str = "CourseAnchor entry provides constant address for a course to be referenced by";
+pub const COURSE_ANCHOR_ENTRY_DESCRIPTION: &str =
+    "CourseAnchor entry provides constant address for a course to be referenced by";
 
 pub const ERR_ONLY_TEACHER_CAN: &str = "Only the teacher can {} their courses";
 pub const ERR_NO_TEACHER_CHANGE: &str = "Cannot change the teacher of the course";
