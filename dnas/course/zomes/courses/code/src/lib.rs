@@ -3,7 +3,7 @@
 use hdk::prelude::*;
 use hdk_proc_macros::zome;
 extern crate holochain_entry_utils;
-
+mod course;
 #[zome]
 mod my_zome {
 
@@ -19,16 +19,6 @@ mod my_zome {
 
     #[entry_def]
     fn my_entry_def() -> ValidatingEntryType {
-        entry!(
-            name: "my_entry",
-            description: "this is a same entry defintion",
-            sharing: Sharing::Public,
-            validation_package: || {
-                hdk::ValidationPackageDefinition::Entry
-            },
-            validation: | _validation_data: hdk::EntryValidationData<MyEntry>| {
-                Ok(())
-            }
-        )
+        return crate::course::entry_def();
     }
 }
