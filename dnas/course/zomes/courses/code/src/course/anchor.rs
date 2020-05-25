@@ -1,3 +1,12 @@
+use hdk::holochain_persistence_api::cas::content::Address;
+use hdk::{
+    entry_definition::ValidatingEntryType,
+    error::{ZomeApiError, ZomeApiResult},
+    AGENT_ADDRESS,
+};
+
+use super::validation;
+
 // CourseAnchor provides a constant address for a course to be referenced by.
 // Once created, it never changes. It is linked to all Course entries to provide access to the course data.
 pub struct CourseAnchor {
@@ -6,7 +15,8 @@ pub struct CourseAnchor {
 }
 
 pub const COURSE_ANCHOR_ENTRY_NAME: &str = "course_anchor";
-pub const COURSE_ANCHOR_ENTRY_DESCRIPTION: &str = "CourseAnchor entry provides constant address for a course to be referenced by";
+pub const COURSE_ANCHOR_ENTRY_DESCRIPTION: &str =
+    "CourseAnchor entry provides constant address for a course to be referenced by";
 pub const LINK_COURSE_ANCHOR_TO_COURSE: &str = "course_anchor->course";
 pub const LINK_TEACHER_TO_COURSE_ANCHOR: &str = "teacher->courses";
 pub const LINK_STUDENT_TO_COURSE_ANCHOR: &str = "student->courses";
@@ -48,11 +58,7 @@ pub fn course_anchor_entry_def() -> ValidatingEntryType {
                 validation_package: || {
                     hdk::ValidationPackageDefinition::Entry
                 },
-                validation: | _validation_data: hdk::LinkValidationData | {
-                    // TODO:  should validate that we're only linking against Course that has
-                    // this entry's address in course_anchor field
-                    Ok(())
-                }
+                validation: validation::link_course_anchor_to_course
             ),
             from!( // to query all the courses of a user(all courses that a user is the teacher or owner of)
                 "%agent_id",
@@ -60,10 +66,7 @@ pub fn course_anchor_entry_def() -> ValidatingEntryType {
                 validation_package: || {
                     hdk::ValidationPackageDefinition::Entry
                 },
-                validation: | _validation_data: hdk::LinkValidationData | {
-                    // TODO: validate that we're only linking to courses that have teacher_address equal to %agent_id
-                    Ok(())
-                }
+                validation: validation::link_teacher_to_course_anchor
             ),
             // e-nastasia: Q: would this link work & make sense with DNA-per-course architecture? Because with it
             //       every course that certain agent is enrolled to is just another DNA that this agent is running. Of course,

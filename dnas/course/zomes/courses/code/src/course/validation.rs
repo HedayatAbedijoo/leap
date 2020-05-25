@@ -1,11 +1,11 @@
-use super::entry::Course;
 use super::anchor::CourseAnchor;
+use super::entry::Course;
 use hdk::holochain_core_types::chain_header::ChainHeader;
 use hdk::holochain_persistence_api::cas::content::Address;
 
 use hdk::ValidationData;
 
-// ========== Course validation ========
+// ========== Course entry validation ========
 
 pub fn create(entry: Course, validation_data: ValidationData) -> Result<(), String> {
     validate_only_teacher_can_do(validation_data.sources(), "create")
@@ -28,7 +28,7 @@ pub fn delete(
     validate_only_teacher_can_do(validation_data.sources(), "delete")
 }
 
-// ========== CourseAnchor validation ========
+// ========== CourseAnchor entry validation ========
 
 pub fn create(entry: CourseAnchor, validation_data: ValidationData) -> Result<(), String> {
     validate_only_teacher_can_do(validation_data.sources(), "create")
@@ -51,6 +51,23 @@ pub fn delete(
     validate_only_teacher_can_do(validation_data.sources(), "delete")
 }
 
+// ========== CourseAnchor links validation ========
+
+// TODO:  should validate that we're only linking against Course that has
+// this entry's address in course_anchor field
+pub fn link_course_anchor_to_course(
+    _validation_data: hdk::LinkValidationData,
+) -> Result<(), String> {
+    Ok(())
+}
+
+// TODO: validate that we're only linking to courses that have teacher_address equal to %agent_id
+pub fn link_teacher_to_course_anchor(
+    _validation_data: hdk::LinkValidationData,
+) -> Result<(), String> {
+    Ok(())
+}
+
 // ========== private validation helpers ========
 
 fn validate_only_teacher_can_do(
@@ -62,4 +79,3 @@ fn validate_only_teacher_can_do(
     }
     Ok(())
 }
-

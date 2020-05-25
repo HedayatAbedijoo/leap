@@ -8,8 +8,8 @@ use hdk::{
 use super::validation;
 
 // Course struct contains all course data and is updated every time there are changes to the course
-// NOTE: Course doensn't have teacher_address field because only teacher can create courses in every
-//      Course DNA (see course/validation.rs), so having this data here would be unneccessary
+// NOTE (e-nastasia): Course doensn't have teacher_address field because only teacher can create
+//      courses in every Course DNA (see course/validation.rs), so having this data here would be unneccessary
 pub struct Course {
     title: String,
     modules: Vec<Address>,
@@ -49,8 +49,8 @@ pub fn course_entry_def() -> ValidatingEntryType {
                 }
             }
         },
-        // NOTE: Course entry relies on CourseAnchor to handle all linking and it already has CourseAnchor address saved
-        //      inside it, so there's no need to define any other links
+        // NOTE (e-nastasia): Course entry relies on CourseAnchor to handle all linking and it already has
+        //      CourseAnchor address saved inside it, so there's no need to define any other links
         links: [ ]
     )
 }
