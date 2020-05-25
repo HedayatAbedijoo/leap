@@ -1,8 +1,8 @@
 use super::anchor::CourseAnchor;
 use super::entry::Course;
+
 use hdk::holochain_core_types::chain_header::ChainHeader;
 use hdk::holochain_persistence_api::cas::content::Address;
-
 use hdk::ValidationData;
 
 // ========== Course entry validation ========

@@ -36,7 +36,7 @@ pub fn course_anchor_entry_def() -> ValidatingEntryType {
         validation_package: || {
             hdk::ValidationPackageDefinition::Entry
         },
-        validation: | validation_data: hdk::EntryValidationData<Course>| {
+        validation: | validation_data: hdk::EntryValidationData<CourseAnchor>| {
             match validation_data{
                 EntryValidationData::Create { entry, validation_data } => {
                     // NOTE (e-nastasia): these calls are identical to validation calls in course/entry.rs
@@ -60,40 +60,25 @@ pub fn course_anchor_entry_def() -> ValidatingEntryType {
                 },
                 validation: validation::link_course_anchor_to_course
             ),
-            from!( // to query all the courses of a user(all courses that a user is the teacher or owner of)
-                "%agent_id",
-                link_type: LINK_TEACHER_TO_COURSE_ANCHOR,
-                validation_package: || {
-                    hdk::ValidationPackageDefinition::Entry
-                },
-                validation: validation::link_teacher_to_course_anchor
-            ),
-            // e-nastasia: Q: would this link work & make sense with DNA-per-course architecture? Because with it
-            //       every course that certain agent is enrolled to is just another DNA that this agent is running. Of course,
-            //       we still need to differentiate between courses where agent is a teacher vs courses where agent is a student
-            from!( // to query all courses that one user enrolled
-                "%agent_id",
-                link_type: LINK_STUDENT_TO_COURSE_ANCHOR,
-                validation_package: || {
-                    hdk::ValidationPackageDefinition::Entry
-                },
-                validation: | _validation_data: hdk::LinkValidationData | {
-                    Ok(())
-                }
-            ),
-            // e-nastasia: Q: pretty much the same applies here. This link is in an opposite direction, but it's usefullness is still
-            //      questionable in DNA-per-course architecture
-            to!( // to query all enrolled user for a course
-                "%agent_id",
-                link_type: LINK_COURSE_ANCHOR_TO_STUDENT,
-                validation_package: || {
-                    hdk::ValidationPackageDefinition::Entry
-                },
-                validation: | _validation_data: hdk::LinkValidationData | {
-                    // TODO: validate that we're not linking to course teacher
-                    Ok(())
-                }
-            )
+            // (e-nastasia) NOTE: I don't think we'll need this link. In a single DNA there can only be courses that belong to user if
+            //  their agent_address == DNA.teacher_address.
+            //  And we don't have to answer this question for other DNAs located outside of the current one.
+            // from!( // to query all the courses of a user(all courses that a user is the teacher or owner of)
+            //     "%agent_id",
+            //     link_type: LINK_TEACHER_TO_COURSE_ANCHOR,
+            //     validation_package: || {
+            //         hdk::ValidationPackageDefinition::Entry
+            //     },
+            //     validation: validation::link_teacher_to_course_anchor
+            // ),
+            // (e-nastasia) NOTE: in previous leap version we had link from "student->course" to allow listing all courses that someone is
+            //      enrolled to. But now we have separate DNAs and list of all courses that someone is enrolled to would be calculated as:
+            //      - get all course DNAs that agent is running
+            //          - where DNA.teacher_address != agent_address
+            //      So looks like we don't have to have this link anymore.
+            //      As for link "course->student", this would be calculated as:
+            //      - get all DHT participants
+            //          - where agent_address != DNA.teacher_address
         ]
     )
 }
