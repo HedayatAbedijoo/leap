@@ -4,19 +4,9 @@
 
 use hdk::prelude::*;
 use hdk_proc_macros::zome;
-
-// see https://developer.holochain.org/api/0.0.47-alpha1/hdk/ for info on using the hdk library
-
-// This is a sample zome that defines an entry type "MyEntry" that can be committed to the
-// agent's chain via the exposed function create_my_entry
-pub(crate) mod catalog;
-#[derive(Serialize, Deserialize, Debug, DefaultJson, Clone)]
-pub struct MyEntry {
-    content: String,
-}
-
+mod catalog;
 #[zome]
-mod my_zome {
+mod catalog_zome {
 
     // use crate::catalog::entry::Catalog;
 
@@ -31,29 +21,43 @@ mod my_zome {
     }
 
     #[entry_def]
-    fn my_entry_def() -> ValidatingEntryType {
-        entry!(
-            name: "my_entry",
-            description: "this is a same entry defintion",
-            sharing: Sharing::Public,
-            validation_package: || {
-                hdk::ValidationPackageDefinition::Entry
-            },
-            validation: | _validation_data: hdk::EntryValidationData<MyEntry>| {
-                Ok(())
-            }
-        )
+    fn catalog_entry_def() -> ValidatingEntryType {
+        return crate::catalog::entry::catalog_entry_def();
     }
 
-    #[zome_fn("hc_public")]
-    fn create_my_entry(entry: MyEntry) -> ZomeApiResult<Address> {
-        let entry = Entry::App("my_entry".into(), entry.into());
-        let address = hdk::commit_entry(&entry)?;
-        Ok(address)
+    // This is anchor will be used for: SELECT * FROM CATALOGS
+    #[entry_def]
+    fn all_catalog_anchor_def() -> ValidatingEntryType {
+        return crate::catalog::anchors::anchor_select_all_catalog_def();
     }
 
+    // Create a Catalog for Course in Index for Free
     #[zome_fn("hc_public")]
-    fn get_my_entry(address: Address) -> ZomeApiResult<Option<Entry>> {
-        hdk::get_entry(&address)
+    fn create_free_catalog(
+        course_title: String,
+        course_id: String,
+        publish_time: usize,
+    ) -> ZomeApiResult<Address> {
+        return crate::catalog::handlers::create_free_catalog(
+            course_title,
+            course_id,
+            publish_time,
+        );
+    }
+
+    // Create a Catalog for Course in Index for Free
+    #[zome_fn("hc_public")]
+    fn create_payable_catalog(
+        course_title: String,
+        course_id: String,
+        publish_time: usize,
+        payment_info_address: Address,
+    ) -> ZomeApiResult<Address> {
+        return crate::catalog::handlers::create_catalog_with_payment_info(
+            course_title,
+            course_id,
+            publish_time,
+            payment_info_address,
+        );
     }
 }
