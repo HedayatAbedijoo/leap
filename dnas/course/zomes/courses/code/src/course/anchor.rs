@@ -11,7 +11,7 @@ use super::validation;
 // Once created, it never changes. It is linked to all Course entries to provide access to the course data.
 pub struct CourseAnchor {
     timestamp: i32,
-    teacher_address: Address,
+    course_title: String,
 }
 
 pub const COURSE_ANCHOR_ENTRY_NAME: &str = "course_anchor";
