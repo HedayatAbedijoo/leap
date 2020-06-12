@@ -1,27 +1,11 @@
-use super::entry::Module;
-
-use hdk::holochain_core_types::chain_header::ChainHeader;
-use hdk::holochain_persistence_api::cas::content::Address;
 use hdk::ValidationData;
 
-pub fn create(entry: Module, validation_data: ValidationData) -> Result<(), String> {
+pub fn validate_only_teacher_can_do(validation_data: ValidationData) -> Result<(), String> {
+    if !validation_data
+        .sources()
+        .contains(&crate::helper::get_teacher_address()?)
+    {
+        return Err(format!("Only the teacher can run this operation"));
+    }
     Ok(())
 }
-
-pub fn modify(
-    _new_entry: Module,
-    _old_entry: Module,
-    _old_entry_header: ChainHeader,
-    validation_data: ValidationData,
-) -> Result<(), String> {
-    Ok(())
-}
-
-pub fn delete(
-    _old_entry: Module,
-    _old_entry_header: ChainHeader,
-    validation_data: ValidationData,
-) -> Result<(), String> {
-    Ok(())
-}
-

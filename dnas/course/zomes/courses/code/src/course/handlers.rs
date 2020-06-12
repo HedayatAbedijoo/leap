@@ -46,3 +46,19 @@ pub fn update(
 
     Ok(updated_course_address)
 }
+
+// TODO: improve this function later
+pub fn add_new_module(
+    course_address: &Address,
+    new_module_address: &Address,
+) -> ZomeApiResult<Address> {
+    let mut course: Course = hdk::utils::get_as_type(course_address.clone())?;
+    course.modules.push(new_module_address.clone());
+    update(course.title, course.modules, course_address)
+}
+
+pub fn remove_module(course_address: &Address, module_address: &Address) -> ZomeApiResult<Address> {
+    let mut course: Course = hdk::utils::get_as_type(course_address.clone())?;
+    course.modules.remove_item(module_address);
+    update(course.title, course.modules, course_address)
+}

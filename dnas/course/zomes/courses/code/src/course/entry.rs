@@ -4,17 +4,15 @@ use holochain_entry_utils::HolochainEntry;
 
 #[derive(Serialize, Deserialize, Debug, DefaultJson, Clone)]
 pub struct Course {
-    title: String,
-    modules: Vec<Address>,
+    pub title: String,
+    pub modules: Vec<Address>,
     // anchor_address: Address, // implicit link to CourseAnchor to be able to quickly retrieve the corresponding anchor
     timestamp: u64,
 }
 
-pub const COURSE_ENTRY_NAME: &str = "course";
-
 impl HolochainEntry for Course {
     fn entry_type() -> String {
-        String::from(COURSE_ENTRY_NAME)
+        String::from("course")
     }
 }
 
@@ -39,7 +37,7 @@ impl Course {
 
 pub fn course_entry_def() -> ValidatingEntryType {
     entry!(
-        name: COURSE_ENTRY_NAME,
+        name: Course::entry_type(),
         description: "Course entry contains all course data and is updated on every course change",
         sharing: Sharing::Public,
         validation_package: || {
