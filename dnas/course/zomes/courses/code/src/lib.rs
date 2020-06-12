@@ -4,6 +4,7 @@
 use hdk::prelude::*;
 use hdk_proc_macros::zome;
 extern crate holochain_entry_utils;
+mod content;
 mod course;
 mod helper;
 mod module;
@@ -64,5 +65,37 @@ mod my_zome {
     #[zome_fn("hc_public")]
     fn delete_module(module_address: Address, course_address: Address) -> ZomeApiResult<Address> {
         crate::module::handlers::delete(module_address, course_address)
+    }
+
+    /**************************** Content Entry Definition & Functions */
+    #[entry_def]
+    fn content_entry_def() -> ValidatingEntryType {
+        return crate::content::entry::content_entry_def();
+    }
+
+    #[zome_fn("hc_public")]
+    fn create_content(
+        title: String,
+        module_address: Address,
+        url: String,
+        timestamp: u64,
+        description: String,
+    ) -> ZomeApiResult<Address> {
+        crate::content::handlers::create(module_address, title, url, timestamp, description)
+    }
+
+    #[zome_fn("hc_public")]
+    fn update_content(
+        content_address: Address,
+        title: String,
+        url: String,
+        description: String,
+    ) -> ZomeApiResult<Address> {
+        crate::content::handlers::update(content_address, title, url, description)
+    }
+
+    #[zome_fn("hc_public")]
+    fn delete_content(content_address: Address, module_address: Address) -> ZomeApiResult<Address> {
+        crate::content::handlers::delete(content_address, module_address)
     }
 }

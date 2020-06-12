@@ -1,7 +1,9 @@
 use hdk::prelude::*;
 
 use super::validation;
+use crate::content::entry::Content;
 use holochain_entry_utils::HolochainEntry;
+pub const MODULE_TO_CONTENT_LINK: &str = "module->contents";
 
 #[derive(Serialize, Deserialize, Debug, DefaultJson, Clone)]
 pub struct Module {
@@ -53,6 +55,17 @@ pub fn module_entry_def() -> ValidatingEntryType {
                 }
             }
         },
-        links: [ ]
+        links:[
+            to!(
+                Content::entry_type(),
+                link_type: MODULE_TO_CONTENT_LINK,
+                validation_package:||{
+                    hdk::ValidationPackageDefinition::Entry
+                },
+                validation:|_validation_data: hdk::LinkValidationData|{
+                    Ok(())
+                }
+            )
+        ]
     )
 }
