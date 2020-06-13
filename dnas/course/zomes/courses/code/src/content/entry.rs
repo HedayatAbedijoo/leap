@@ -37,7 +37,7 @@ impl HolochainEntry for Content {
 pub fn content_entry_def() -> ValidatingEntryType {
     entry!(
         name: Content::entry_type(),
-        description: "Content entry stores single piece of content from a course module",
+        description: "Content entry stores single piece of content from a course section",
         sharing: Sharing::Public,
         validation_package: || {
             hdk::ValidationPackageDefinition::Entry

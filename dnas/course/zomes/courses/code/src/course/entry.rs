@@ -5,7 +5,7 @@ use holochain_entry_utils::HolochainEntry;
 #[derive(Serialize, Deserialize, Debug, DefaultJson, Clone)]
 pub struct Course {
     pub title: String,
-    pub modules: Vec<Address>,
+    pub sections: Vec<Address>,
     // anchor_address: Address, // implicit link to CourseAnchor to be able to quickly retrieve the corresponding anchor
     timestamp: u64,
 }
@@ -22,15 +22,15 @@ impl Course {
             title: title,
             timestamp: timestamp,
             //anchor_address: anchor_address,
-            modules: Vec::default(),
+            sections: Vec::default(),
         }
     }
 
-    pub fn update_from(old_entry: Course, title: String, modules: Vec<Address>) -> Self {
+    pub fn update_from(old_entry: Course, title: String, sections: Vec<Address>) -> Self {
         Course {
             title: title,
             timestamp: old_entry.timestamp + 1,
-            modules: modules,
+            sections: sections,
         }
     }
 }

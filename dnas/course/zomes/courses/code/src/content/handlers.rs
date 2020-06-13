@@ -1,10 +1,10 @@
 use super::entry::Content;
-use crate::module;
+use crate::section;
 use hdk::prelude::*;
 use holochain_entry_utils::HolochainEntry;
 
 pub fn create(
-    module_address: Address,
+    section_address: Address,
     title: String,
     url: String,
     timestamp: u64,
@@ -13,7 +13,7 @@ pub fn create(
     let new_content = Content::new(title, url, timestamp, description);
 
     let new_content_address = hdk::commit_entry(&new_content.entry())?;
-    module::handlers::link_new_content_to_module(module_address, new_content_address.clone())?;
+    section::handlers::link_new_content_to_section(section_address, new_content_address.clone())?;
     Ok(new_content_address)
 }
 
@@ -28,7 +28,7 @@ pub fn update(
     hdk::update_entry(content.entry(), &content_address)
 }
 
-pub fn delete(content_address: Address, module_address: Address) -> ZomeApiResult<Address> {
-    module::handlers::remove_content_link_from_module(module_address, content_address.clone())?;
+pub fn delete(content_address: Address, section_address: Address) -> ZomeApiResult<Address> {
+    section::handlers::remove_content_link_from_section(section_address, content_address.clone())?;
     hdk::remove_entry(&content_address)
 }

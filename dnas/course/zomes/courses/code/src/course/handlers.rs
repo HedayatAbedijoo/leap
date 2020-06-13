@@ -19,12 +19,12 @@ pub fn create(title: String, timestamp: u64) -> ZomeApiResult<Address> {
 
 pub fn update(
     title: String,
-    modules_addresses: Vec<Address>,
+    sections_addresses: Vec<Address>,
     course_address: &Address,
 ) -> ZomeApiResult<Address> {
     let course: Course = hdk::utils::get_as_type(course_address.clone())?;
 
-    let new_version_course = Course::update_from(course, title, modules_addresses);
+    let new_version_course = Course::update_from(course, title, sections_addresses);
 
     // Remove link from Anchor to old version of course
     hdk::remove_link(
@@ -48,17 +48,17 @@ pub fn update(
 }
 
 // TODO: improve this function later
-pub fn add_new_module(
+pub fn add_new_section(
     course_address: &Address,
-    new_module_address: &Address,
+    new_section_address: &Address,
 ) -> ZomeApiResult<Address> {
     let mut course: Course = hdk::utils::get_as_type(course_address.clone())?;
-    course.modules.push(new_module_address.clone());
-    update(course.title, course.modules, course_address)
+    course.sections.push(new_section_address.clone());
+    update(course.title, course.sections, course_address)
 }
 
-pub fn remove_module(course_address: &Address, module_address: &Address) -> ZomeApiResult<Address> {
+pub fn remove_section(course_address: &Address, section_address: &Address) -> ZomeApiResult<Address> {
     let mut course: Course = hdk::utils::get_as_type(course_address.clone())?;
-    course.modules.remove_item(module_address);
-    update(course.title, course.modules, course_address)
+    course.sections.remove_item(section_address);
+    update(course.title, course.sections, course_address)
 }

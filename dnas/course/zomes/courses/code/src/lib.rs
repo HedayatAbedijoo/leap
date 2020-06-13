@@ -7,7 +7,7 @@ extern crate holochain_entry_utils;
 mod content;
 mod course;
 mod helper;
-mod module;
+mod section;
 #[zome]
 mod my_zome {
 
@@ -39,32 +39,32 @@ mod my_zome {
     #[zome_fn("hc_public")]
     fn update_course(
         title: String,
-        modules_addresses: Vec<Address>,
+        sections_addresses: Vec<Address>,
         course_address: Address,
     ) -> ZomeApiResult<Address> {
-        crate::course::handlers::update(title, modules_addresses, &course_address)
+        crate::course::handlers::update(title, sections_addresses, &course_address)
     }
 
-    /**************************** Module Entry Definition & Functions */
+    /**************************** section Entry Definition & Functions */
     #[entry_def]
-    fn module_entry_def() -> ValidatingEntryType {
-        return crate::module::entry::module_entry_def();
+    fn section_entry_def() -> ValidatingEntryType {
+        return crate::section::entry::section_entry_def();
     }
     #[zome_fn("hc_public")]
-    fn create_module(
+    fn create_section(
         title: String,
         course_address: Address,
         timestamp: u64,
     ) -> ZomeApiResult<Address> {
-        crate::module::handlers::create(title, &course_address, timestamp)
+        crate::section::handlers::create(title, &course_address, timestamp)
     }
     #[zome_fn("hc_public")]
-    fn update_module(title: String, module_address: Address) -> ZomeApiResult<Address> {
-        crate::module::handlers::update(title, &module_address)
+    fn update_section(title: String, section_address: Address) -> ZomeApiResult<Address> {
+        crate::section::handlers::update(title, &section_address)
     }
     #[zome_fn("hc_public")]
-    fn delete_module(module_address: Address, course_address: Address) -> ZomeApiResult<Address> {
-        crate::module::handlers::delete(module_address, course_address)
+    fn delete_section(section_address: Address, course_address: Address) -> ZomeApiResult<Address> {
+        crate::section::handlers::delete(section_address, course_address)
     }
 
     /**************************** Content Entry Definition & Functions */
@@ -76,12 +76,12 @@ mod my_zome {
     #[zome_fn("hc_public")]
     fn create_content(
         title: String,
-        module_address: Address,
+        section_address: Address,
         url: String,
         timestamp: u64,
         description: String,
     ) -> ZomeApiResult<Address> {
-        crate::content::handlers::create(module_address, title, url, timestamp, description)
+        crate::content::handlers::create(section_address, title, url, timestamp, description)
     }
 
     #[zome_fn("hc_public")]
@@ -95,7 +95,7 @@ mod my_zome {
     }
 
     #[zome_fn("hc_public")]
-    fn delete_content(content_address: Address, module_address: Address) -> ZomeApiResult<Address> {
-        crate::content::handlers::delete(content_address, module_address)
+    fn delete_content(content_address: Address, section_address: Address) -> ZomeApiResult<Address> {
+        crate::content::handlers::delete(content_address, section_address)
     }
 }
