@@ -6,7 +6,6 @@ use holochain_entry_utils::HolochainEntry;
 pub struct Course {
     pub title: String,
     pub sections: Vec<Address>,
-    // anchor_address: Address, // implicit link to CourseAnchor to be able to quickly retrieve the corresponding anchor
     timestamp: u64,
 }
 
@@ -21,7 +20,6 @@ impl Course {
         Course {
             title: title,
             timestamp: timestamp,
-            //anchor_address: anchor_address,
             sections: Vec::default(),
         }
     }

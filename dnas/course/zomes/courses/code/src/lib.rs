@@ -95,7 +95,10 @@ mod my_zome {
     }
 
     #[zome_fn("hc_public")]
-    fn delete_content(content_address: Address, section_address: Address) -> ZomeApiResult<Address> {
+    fn delete_content(
+        content_address: Address,
+        section_address: Address,
+    ) -> ZomeApiResult<Address> {
         crate::content::handlers::delete(content_address, section_address)
     }
 }

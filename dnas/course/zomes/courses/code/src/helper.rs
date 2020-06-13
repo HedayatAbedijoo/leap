@@ -1,4 +1,5 @@
 use hdk::prelude::*;
+
 pub fn get_teacher_address() -> ZomeApiResult<Address> {
     let initial_members_json = hdk::property("teacher_address")?;
     let initial_members: Result<Address, _> =
@@ -11,3 +12,14 @@ pub fn get_teacher_address() -> ZomeApiResult<Address> {
         ))),
     }
 }
+
+pub fn validate_only_teacher_can_do(
+    validation_data_sources: Vec<Address>,
+    action_name: &str,
+) -> Result<(), String> {
+    if !validation_data_sources.contains(&get_teacher_address()?) {
+        return Err(format!("Only the teacher can {}", action_name));
+    }
+    Ok(())
+}
+

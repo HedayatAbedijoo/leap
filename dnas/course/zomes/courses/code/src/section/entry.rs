@@ -1,6 +1,6 @@
-use hdk::prelude::*;
 use super::validation;
 use crate::content::entry::Content;
+use hdk::prelude::*;
 use holochain_entry_utils::HolochainEntry;
 pub const SECTION_TO_CONTENT_LINK: &str = "Section->contents";
 
