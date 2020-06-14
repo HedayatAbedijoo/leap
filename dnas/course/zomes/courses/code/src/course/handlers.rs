@@ -57,7 +57,10 @@ pub fn add_new_section(
     update(course.title, course.sections, course_address)
 }
 
-pub fn remove_section(course_address: &Address, section_address: &Address) -> ZomeApiResult<Address> {
+pub fn remove_section(
+    course_address: &Address,
+    section_address: &Address,
+) -> ZomeApiResult<Address> {
     let mut course: Course = hdk::utils::get_as_type(course_address.clone())?;
     course.sections.remove_item(section_address);
     update(course.title, course.sections, course_address)
